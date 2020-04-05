@@ -447,6 +447,11 @@
               <FileType>1</FileType>
               <FilePath>..\01_FWLIB\src\stm32f10x_usart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\01_FWLIB\src\stm32f10x_iwdg.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -456,16 +461,6 @@
               <FileName>BspAdc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\02_USER\USER_SRC\BspAdc.c</FilePath>
-            </File>
-            <File>
-              <FileName>BspAT24CXX.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\02_USER\USER_SRC\BspAT24CXX.c</FilePath>
-            </File>
-            <File>
-              <FileName>BspIIC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\02_USER\USER_SRC\BspIIC.c</FilePath>
             </File>
             <File>
               <FileName>GPIO.c</FileName>
@@ -498,25 +493,40 @@
               <FilePath>..\02_USER\USER_SRC\BspUsart.c</FilePath>
             </File>
             <File>
-              <FileName>BspBuzzer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\02_USER\USER_SRC\BspBuzzer.c</FilePath>
-            </File>
-            <File>
               <FileName>BspTimer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\02_USER\USER_SRC\BspTimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspOLED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspOLED.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspSystick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspSystick.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspMLX90614.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspMLX90614.c</FilePath>
+            </File>
+            <File>
+              <FileName>system.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\system.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspIWDG.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspIWDG.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>04_SYSTEM</GroupName>
           <Files>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\03_SYSTEM\03_SYSTEM_SRC\delay.c</FilePath>
-            </File>
             <File>
               <FileName>sys.c</FileName>
               <FileType>1</FileType>

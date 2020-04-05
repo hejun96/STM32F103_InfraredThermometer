@@ -22,22 +22,24 @@ Dialog DLL:      TARMSTM.DLL V1.66.0.0
  
 <h2>Project:</h2>
 F:\EmbededData\DongFangqing\STM32F103_InfraredThermometer_ V0.0_20200401\04_MDK-ARM\STM32F103_MDK.uvprojx
-Project File Date:  04/04/2020
+Project File Date:  04/05/2020
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'd:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Target 1'
-compiling GPIO.c...
-..\02_USER\USER_INC\global.h(261): warning:  #1295-D: Deprecated declaration BspInit - give arg types
+compiling main.c...
+..\02_USER\USER_INC\global.h(294): warning:  #1295-D: Deprecated declaration SMBus_Init - give arg types
+  void SMBus_Init();
+..\02_USER\USER_INC\global.h(300): warning:  #1295-D: Deprecated declaration BspInit - give arg types
   static void BspInit();
-..\02_USER\USER_SRC\GPIO.c: 1 warning, 0 errors
-compiling BspTimer.c...
-..\02_USER\USER_INC\global.h(261): warning:  #1295-D: Deprecated declaration BspInit - give arg types
-  static void BspInit();
-..\02_USER\USER_SRC\BspTimer.c: 1 warning, 0 errors
+..\02_USER\USER_INC\global.h(305): warning:  #1295-D: Deprecated declaration InfraredThermometerTask - give arg types
+  void InfraredThermometerTask();
+..\02_USER\main.c(50): warning:  #1-D: last line of file ends without a newline
+  }
+..\02_USER\main.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=3256 RO-data=336 RW-data=44 ZI-data=1636  
-".\Objects\STM32F103_MDK.axf" - 0 Error(s), 2 Warning(s).
+Program Size: Code=14622 RO-data=2586 RW-data=1092 ZI-data=1668  
+".\Objects\STM32F103_MDK.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -51,7 +53,7 @@ Package Vendor: Keil
   D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:09
+Build Time Elapsed:  00:00:06
 </pre>
 </body>
 </html>

@@ -32,4 +32,3 @@
 .\objects\bspbutton.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\bspbutton.o: ..\03_SYSTEM\03_SYSTEM_INC\sys.h
 .\objects\bspbutton.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\bspbutton.o: ..\03_SYSTEM\03_SYSTEM_INC\delay.h

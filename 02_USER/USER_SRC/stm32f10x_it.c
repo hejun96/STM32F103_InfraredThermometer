@@ -27,6 +27,8 @@
 ///#include "FreeRTOS.h"//FreeRTOS使用
 ///#include "task.h"
 
+#include "global.h"
+
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
   */
@@ -179,6 +181,22 @@ void SysTick_Handler(void)
   * @}
   */ 
 
+void SysTick_Handler(void)
+{
+	TimingDelay_Decrement();
+}
+
+
+//7.中断处理函数
+void USART1_IRQHandler(void)
+{
+	u8 res;//定义一个变量，将接收到的值赋给变量
+	if(USART_GetITStatus(USART1,USART_IT_RXNE))//获取中断状态标志位
+	{
+		res = USART_ReceiveData(USART1);//接收数据到串口
+		USART_SendData(USART1,res);//发数据到串口
+	}
+}
 
 
 

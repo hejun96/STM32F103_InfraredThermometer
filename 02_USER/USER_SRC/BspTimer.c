@@ -22,10 +22,17 @@
 //1ms -> (arr:999 psc:71)
 
 //PB1-TIM3_CH4 复用BUZZER无源蜂鸣器
-void Timer3Config(void)
+void TIM3_PWM_INIT(void)
 {
+	GPIO_InitTypeDef GPIO_InitStructure;
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;	
-
+	
+	//设置该引脚为复用输出功能,输出TIM3 CH4的PWM脉冲波形	GPIOB.1
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1; //TIM_CH2
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;  //复用推挽输出
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);//初始化GPIO
+	
 	TIM_OCInitTypeDef TIM_OCInitStructure;
 	
 	// 开启定时器时钟,即内部时钟CK_INT=72M

@@ -6,6 +6,9 @@
 #include "sys.h"//RS485,TFTLCD用 类PBout()定义
 #include "stdlib.h"//TFTLCD用
 
+//SysTick
+#define delay_ms(x) 				delay_us(100*x)	 //ms
+
 //LED
 //LED_GPIO
 #define RGB_LED_CLK					RCC_APB2Periph_GPIOA
@@ -98,49 +101,61 @@
 #define ADC_IRQHandler				ADC1_2_IRQHnadler
 
 
-//IIC
+//OLED_128*4*8
+#define OLED_MODE 					0
+#define SIZE 						8
+#define XLevelL						0x00
+#define XLevelH						0x10
+#define Max_Column					128
+#define Max_Row						64
+#define	Brightness					0xFF 
+#define X_WIDTH 					128
+#define Y_WIDTH 					64
 
-//IO方向设置
- 
-#define SDA_IN()  					{GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)8<<28;}
-#define SDA_OUT() 					{GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)3<<28;}
+#define OLED_IIC_GPIO_PORT          GPIOB   
 
-//IO操作函数	 
-#define IIC_SCL    					PBout(6) //SCL
-#define IIC_SDA    					PBout(7) //SDA	 
-#define READ_SDA   					PBin(7)  //输入SDA 
+#define OLED_SCLK_GPIO_PIN  		GPIO_Pin_6
+#define OLED_SDA_GPIO_PIN  			GPIO_Pin_7
 
+#define OLED_SCLK_Clr() 			GPIO_WriteBit(OLED_IIC_GPIO_PORT, OLED_SCLK_GPIO_PIN,Bit_RESET)//SCL IIC接口的时钟信号
+#define OLED_SCLK_Set() 			GPIO_WriteBit(OLED_IIC_GPIO_PORT, OLED_SCLK_GPIO_PIN,Bit_SET)
 
-//AT24CXX
-#define AT24C01						127
-#define AT24C02						255
-#define AT24C04						511
-#define AT24C08						1023
-#define AT24C16						2047
-#define AT24C32						4095
-#define AT24C64	    				8191
-#define AT24C128					16383
-#define AT24C256					32767  
+#define OLED_SDIN_Clr() 			GPIO_WriteBit(OLED_IIC_GPIO_PORT, OLED_SDA_GPIO_PIN,Bit_RESET)//SDA IIC接口的数据信号
+#define OLED_SDIN_Set() 			GPIO_WriteBit(OLED_IIC_GPIO_PORT, OLED_SDA_GPIO_PIN,Bit_SET)
 
-//Mini/Warship STM32开发板均使用的是24c02，所以定义EE_TYPE为AT24C02
-#define EE_TYPE AT24C02
+ 		     
+#define OLED_CMD  					0	//写命令
+#define OLED_DATA 					1	//写数据
 
+//MLX90614
+#define ACK	 						0 //应答
+#define	NACK 						1 //无应答
+#define SA							0x00 //Slave address 单个MLX90614时地址为0x00,多个时地址默认为0x5a
+#define RAM_ACCESS					0x00 //RAM access command RAM存取命令
+#define EEPROM_ACCESS				0x20 //EEPROM access command EEPROM存取命令
+#define RAM_TOBJ1					0x07 //To1 address in the eeprom 目标1温度,检测到的红外温度 -70.01 ~ 382.19度
 
-//函数声明
-
-//GPIO
-void RCCConfigAll(void);
-void GPIOConfigAll(void);
-
-static void NVIC_USART1(void);
-void NVIC_TIMER3(void);
-void NVICConfigAll(void);
-
-
-//LED
+#define SMBUS_PORT					GPIOB      //PB端口(端口和下面的两个针脚可自定义)
+#define SMBUS_SCK					GPIO_Pin_10 //PB10：SCL
+#define SMBUS_SDA					GPIO_Pin_11 //PB11：SDA
 
 
-//异或:C语言的一个二进制运算符 与0异或不变,与1异或改变。相同为0，不同为1
+//SCL 引脚宏定义
+#define SMBUS_SCK_H()	    		GPIO_WriteBit(SMBUS_PORT, SMBUS_SCK,Bit_SET)//置高电平
+#define SMBUS_SCK_L()	    		GPIO_WriteBit(SMBUS_PORT, SMBUS_SCK,Bit_RESET)//置低电平
+//SDA 引脚宏定义
+#define SMBUS_SDA_H()	    		GPIO_WriteBit(SMBUS_PORT, SMBUS_SDA,Bit_SET) 
+#define SMBUS_SDA_L()	    		GPIO_WriteBit(SMBUS_PORT, SMBUS_SDA,Bit_RESET)
+
+//#define SMBUS_SDA_PIN()	    	SMBUS_PORT->IDR & SMBUS_SDA //读取引脚电平
+#define SMBUS_SDA_PIN() 			GPIO_ReadInputDataBit(SMBUS_PORT, SMBUS_SDA)
+
+enum
+{
+	FLAG_OFF = 0,
+	FLAG_ON,
+	FLAG_PAUSE
+};
 
 typedef enum
 {
@@ -148,7 +163,55 @@ typedef enum
 	GREEN,
 	BLUE,
 }LED_TYPE;
+
+typedef enum
+{
+	BUTTON_TYPE_MENU = 0,
+	EN_BUTTON_TYPE_UP,
+	EN_BUTTON_TYPE_DOWN,
+	EN_BUTTON_TYPE_LEFT,
+	EN_BUTTON_TYPE_RIGHT,
+	EN_BUTTON_TYPE_NONE,
+
+}BUTTON_TYPE;
+
+typedef union
+{
+	u32 sta[8];
+	struct
+	{
+		u32 TempCleanScreenFlag:2;//温度清屏标志位 0:复位 1:运行 2:完成 3:暂停
+		u32 VolCleanScreenFlag:2;//电压清屏标志位 0:复位 1:运行 2:完成 3:暂停
+		u32 CollectionFlag:2;//采集数据标志位 0:复位 1:运行 2:完成 3:暂停
+	}s;
+
+}STA_UNION;
+extern volatile STA_UNION SystemSta;
+
+//函数声明
+
+//SysTick
+
+void TimingDelay_Decrement(void);
+
+//GPIO
+void RCCConfigAll(void);
+void GPIOConfigAll(void);
+
+static void NVIC_USART1(void);
+void NVIC_TIMER2(void);
+void NVICConfigAll(void);
+
+
+//SysTick
+void SysTick_Init(void);
+void delay_us(__IO uint32_t nTime);
+
+//LED
 void LEDCtrl(LED_TYPE LEDType,uint8_t LEDState);
+
+//异或:C语言的一个二进制运算符 与0异或不变,与1异或改变。相同为0，不同为1
+
 
 
 
@@ -161,46 +224,16 @@ int fputc(int ch, FILE *f);
 int fgetc(FILE *f);
 
 
-
-//OLCD_128*32
-
-//LCD重要参数集
-typedef struct  
-{										    
-	u16 width;			//LCD 宽度
-	u16 height;			//LCD 高度
-	u16 id;				//LCD ID
-	u8  dir;			//横屏还是竖屏控制：0，竖屏；1，横屏。	
-	u16	wramcmd;		//开始写gram指令
-	u16  setxcmd;		//设置x坐标指令
-	u16  setycmd;		//设置y坐标指令 
-}_lcd_dev; 	  
-
-
-
-//BUZZER
-
-
-
 //BUTTON
 void ButtonConfig(void);
 ///u8 ButtonScan(u8);
 ///uint8_t KeyScan(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin);
-typedef enum
-{
-	BUTTON_TYPE_MENU = 0,
-	EN_BUTTON_TYPE_UP,
-	EN_BUTTON_TYPE_DOWN,
-	EN_BUTTON_TYPE_LEFT,
-	EN_BUTTON_TYPE_RIGHT,
-	EN_BUTTON_TYPE_NONE,
 
-}KEY_TYPE;
-unsigned char KeyIsAnyButtonPress(KEY_TYPE KeyType);
+unsigned char IsAnyButtonPress(BUTTON_TYPE ButtonType);
 
 
 //TIMER
-void Timer3Config(void);
+void TIM3_PWM_INIT(void);
 
 
 /*
@@ -214,6 +247,7 @@ void AdcConfig(void);
 u16 GetAdc(u8 ch);
 u16 GetAdcAverage(u8 ch,u8 times);
 
+float GetVoltageValue(void);
 
 //ADC Temperature Sensor
 
@@ -223,43 +257,54 @@ u16 GetTemperatureAverage(void);
 u16 GetTemperatureAdcAverage(u8 ch,u8 times);
 short GetTemperatureValue(void);
 
+//OLED_128*4*8控制用函数
+void OLEDConfig(void);
 
+void OLED_WR_Byte(unsigned dat,unsigned cmd);  
+void OLED_Display_On(void);
+void OLED_Display_Off(void);	   							   		    
+void OLED_Clear(void);
+void OLED_DrawPoint(uint8_t x,uint8_t y,uint8_t t);
+void OLED_Fill(uint8_t x1,uint8_t y1,uint8_t x2,uint8_t y2,uint8_t dot);
+void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size);
+void OLED_ShowNum(uint8_t x,uint8_t y,uint32_t num,uint8_t len,uint8_t size);
+void OLED_ShowString(uint8_t x,uint8_t y, uint8_t *p,uint8_t Char_Size);	 
+void OLED_Set_Pos(unsigned char x, unsigned char y);
+void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no);
+void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
+void Delay_50ms(unsigned int Del_50ms);
+void Delay_1ms(unsigned int Del_1ms);
+void fill_picture(unsigned char fill_Data);
+void Picture(void);
+void OLED_ShowCHinese16x16(uint8_t x,uint8_t y,uint8_t num,uint8_t (*buf)[16]);
+void IIC_Start(void);
+void IIC_Stop(void);
+void Write_IIC_Command(unsigned char IIC_Command);
+void Write_IIC_Data(unsigned char IIC_Data);
+void Write_IIC_Byte(unsigned char IIC_Byte);
 
-//IIC所有操作函数
-void IIC_Init(void);                //初始化IIC的IO口				 
-void IIC_Start(void);				//发送IIC开始信号
-void IIC_Stop(void);	  			//发送IIC停止信号
-void IIC_Send_Byte(u8 txd);			//IIC发送一个字节
-u8 IIC_Read_Byte(unsigned char ack);//IIC读取一个字节
-u8 IIC_Wait_Ack(void); 				//IIC等待ACK信号
-void IIC_Ack(void);					//IIC发送ACK信号
-void IIC_NAck(void);				//IIC不发送ACK信号
-
-void IIC_Write_One_Byte(u8 daddr,u8 addr,u8 data);
-u8 IIC_Read_One_Byte(u8 daddr,u8 addr);	
-
-
-
-					  
-u8 AT24CXX_ReadOneByte(u16 ReadAddr);							//指定地址读取一个字节
-void AT24CXX_WriteOneByte(u16 WriteAddr,u8 DataToWrite);		//指定地址写入一个字节
-void AT24CXX_WriteLenByte(u16 WriteAddr,u32 DataToWrite,u8 Len);//指定地址开始写入指定长度的数据
-u32 AT24CXX_ReadLenByte(u16 ReadAddr,u8 Len);					//指定地址开始读取指定长度数据
-void AT24CXX_Write(u16 WriteAddr,u8 *pBuffer,u16 NumToWrite);	//从指定地址开始写入指定长度的数据
-void AT24CXX_Read(u16 ReadAddr,u8 *pBuffer,u16 NumToRead);   	//从指定地址开始读出指定长度的数据
-
-u8 AT24CXX_Check(void);  //检查器件
-void AT24CXX_Init(void); //初始化IIC
-
+void IIC_Wait_Ack(void);
+void OLED_DataClear(void) ;
 
 //IWDG
 void IWDGConfig(u8 prer ,u16 rlr);
 void IWDG_Feed(void);
 
+//MXL90614
+void SMBus_Init();
+uint16_t SMBus_ReadMemory(uint8_t slaveAddress, uint8_t command);
+uint8_t PEC_Calculation(uint8_t pec[]);
+float SMBus_ReadTemp(void);
 
 //Bsp --- Board Support Pakeage
 static void BspInit();
 
+
+//system
+void BuzzerVoiceRegulation(uint8_t VoiceSize);
+void InfraredThermometerTask();
+extern unsigned char BMP1[]; 
+extern unsigned char Peacock[]; 
 #endif
 
 

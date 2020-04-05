@@ -1,8 +1,6 @@
 #include "global.h"
-#include "delay.h"
 
-
-unsigned char KeyIsAnyButtonPress(KEY_TYPE KeyType)
+unsigned char IsAnyButtonPress(BUTTON_TYPE ButtonType)
 {
 	//检测温度按键是否按下
 	if(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,TEMPERATURE_BUTTON_GPIO_PIN) == BUTTON_ON)
@@ -12,7 +10,7 @@ unsigned char KeyIsAnyButtonPress(KEY_TYPE KeyType)
 		if(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,TEMPERATURE_BUTTON_GPIO_PIN) == BUTTON_ON)
 		{
 			while(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,TEMPERATURE_BUTTON_GPIO_PIN) == BUTTON_ON);
-			KeyType = EN_BUTTON_TYPE_UP;//上按键
+			ButtonType = EN_BUTTON_TYPE_UP;//上按键
 			return BUTTON_ON;
 		}
 	}
@@ -24,7 +22,7 @@ unsigned char KeyIsAnyButtonPress(KEY_TYPE KeyType)
 		if(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,SELECT_BUTTON_GPIO_PIN) == BUTTON_ON)
 		{
 			while(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,SELECT_BUTTON_GPIO_PIN) == BUTTON_ON);
-			KeyType = EN_BUTTON_TYPE_RIGHT;//右按键
+			ButtonType = EN_BUTTON_TYPE_RIGHT;//右按键
 			return BUTTON_ON;
 		}
 	}
@@ -36,7 +34,7 @@ unsigned char KeyIsAnyButtonPress(KEY_TYPE KeyType)
 		if(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,BACK_BUTTON_GPIO_PIN) == BUTTON_ON)
 		{
 			while(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,BACK_BUTTON_GPIO_PIN) == BUTTON_ON);
-			KeyType = EN_BUTTON_TYPE_LEFT;//左按键
+			ButtonType = EN_BUTTON_TYPE_LEFT;//左按键
 			return BUTTON_ON;
 		}
 	}
@@ -49,7 +47,7 @@ unsigned char KeyIsAnyButtonPress(KEY_TYPE KeyType)
 		if(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,VOLTAGE_BUTTON_GPIO_PIN) == BUTTON_ON)
 		{
 			while(GPIO_ReadInputDataBit(ALL_BUTTON_GPIO_PORT,VOLTAGE_BUTTON_GPIO_PIN) == BUTTON_ON);
-			KeyType = EN_BUTTON_TYPE_DOWN;//下按键
+			ButtonType = EN_BUTTON_TYPE_DOWN;//下按键
 			return BUTTON_ON;
 		}
 	}

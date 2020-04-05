@@ -29,3 +29,7 @@
 .\objects\stm32f10x_it.o: ..\01_FWLIB\inc\stm32f10x_usart.h
 .\objects\stm32f10x_it.o: ..\01_FWLIB\inc\stm32f10x_wwdg.h
 .\objects\stm32f10x_it.o: ..\01_FWLIB\inc\misc.h
+.\objects\stm32f10x_it.o: ..\02_USER\USER_INC\global.h
+.\objects\stm32f10x_it.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\stm32f10x_it.o: ..\03_SYSTEM\03_SYSTEM_INC\sys.h
+.\objects\stm32f10x_it.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

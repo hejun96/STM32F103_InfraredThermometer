@@ -34,9 +34,11 @@ void GPIOConfigAll(void)
 	///GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速率
 	GPIO_SetBits(GPIOB,GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);//输入1，关闭按键
 	
-	//B Output	PB1-BUZZER
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;//复用推挽输出，用TIM3控制PB1无源蜂鸣器发声
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;//
+	
+	
+	//B Output	PB1-BUZZER PB6-I2C1_SCL PB7-I2C1_SDA
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出，PB1无源蜂鸣器
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_6|GPIO_Pin_7;//
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速率
 	GPIO_Init(GPIOB,&GPIO_InitStructure);
 	GPIO_SetBits(BUZZER_GPIO_PORT,BUZZER_GPIO_PIN);//输出1，关闭蜂鸣器
@@ -72,15 +74,15 @@ static void NVIC_USART1(void)
 	NVIC_Init(&NVIC_InitStructure);
 }
 
-/*
+
 //中断优先级配置
-void NVIC_TIMER3(void)
+void NVIC_TIMER2(void)
 {
     NVIC_InitTypeDef NVIC_InitStructure; 
     // 设置中断组为0
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);		
 		// 设置中断来源
-    NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;	
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;	
 		// 设置主优先级为 0
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;	 
 	  // 设置抢占优先级为3
@@ -88,20 +90,10 @@ void NVIC_TIMER3(void)
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
-*/
+
 void NVICConfigAll(void)
 {
 	NVIC_USART1();
 	
 }
 
-//7.中断处理函数
-void USART1_IRQHandler(void)
-{
-	u8 res;//定义一个变量，将接收到的值赋给变量
-	if(USART_GetITStatus(USART1,USART_IT_RXNE))//获取中断状态标志位
-	{
-		res = USART_ReceiveData(USART1);//接收数据到串口
-		USART_SendData(USART1,res);//发数据到串口
-	}
-}
