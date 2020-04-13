@@ -7,7 +7,7 @@
 #include "stdlib.h"//TFTLCD用
 
 //SysTick
-#define delay_ms(x) 				delay_us(100*x)	 //ms
+///#define delay_ms(x) 				delay_us(100*x)	 //ms
 
 //LED
 //LED_GPIO
@@ -70,7 +70,7 @@
 
 #define ALL_BUTTON_CLK				RCC_APB2Periph_GPIOB
 #define ALL_BUTTON_GPIO_PORT		GPIOB
-#define TEMPERATURE_BUTTON_GPIO_PIN	GPIO_Pin_15
+#define Temperature_BUTTON_GPIO_PIN	GPIO_Pin_15
 #define VOLTAGE_BUTTON_GPIO_PIN		GPIO_Pin_14
 #define BACK_BUTTON_GPIO_PIN		GPIO_Pin_13
 #define SELECT_BUTTON_GPIO_PIN		GPIO_Pin_12
@@ -85,7 +85,13 @@
 //TIMER
 //
 
+//DMA
+/*采集的通道数*/
+#define SAMPLE_CHANNEL_NUM  		(5)
 
+/*一次采集的次数*/
+#define SAMPLE_COUNT  				(10)  
+#define ADC1_DR_ADDRESS             ((uint32_t)0x4001244C)
 //ADC
 //ADC_GPIO宏定义
 #define ADC_GPIO_APBxClockFUN		RCC_APB2PeriphClockCmd
@@ -150,6 +156,7 @@
 //#define SMBUS_SDA_PIN()	    	SMBUS_PORT->IDR & SMBUS_SDA //读取引脚电平
 #define SMBUS_SDA_PIN() 			GPIO_ReadInputDataBit(SMBUS_PORT, SMBUS_SDA)
 
+
 enum
 {
 	FLAG_OFF = 0,
@@ -173,7 +180,17 @@ typedef enum
 	EN_BUTTON_TYPE_RIGHT,
 	EN_BUTTON_TYPE_NONE,
 
-}BUTTON_TYPE;
+}BUTTON_TYPE,*buttonType;
+///extern volatile BUTTON_TYPE *ButtonType;
+
+enum
+{
+	TIMER_RESET = 0,//定时器复位
+	TIMER_RUN,//定时器运行
+	TIMER_END,//定时器结束
+	TIMER_PAUSE,//定时器暂停
+};
+
 
 typedef union
 {
@@ -183,10 +200,19 @@ typedef union
 		u32 TempCleanScreenFlag:2;//温度清屏标志位 0:复位 1:运行 2:完成 3:暂停
 		u32 VolCleanScreenFlag:2;//电压清屏标志位 0:复位 1:运行 2:完成 3:暂停
 		u32 CollectionFlag:2;//采集数据标志位 0:复位 1:运行 2:完成 3:暂停
+		u32 ButtonTimerFlag:2;//按钮运行时间标志位 0:复位 1:运行 2:完成 3:暂停
 	}s;
 
 }STA_UNION;
 extern volatile STA_UNION SystemSta;
+
+typedef struct
+{
+	u32 ButtonCnt;
+	
+
+}DATA_STRUCT;
+extern volatile DATA_STRUCT SystemData;
 
 //函数声明
 
@@ -200,12 +226,18 @@ void GPIOConfigAll(void);
 
 static void NVIC_USART1(void);
 void NVIC_TIMER2(void);
+void NVIC_EXTI(void);
+
 void NVICConfigAll(void);
 
-
+void EXTIConfig(void);
 //SysTick
 void SysTick_Init(void);
-void delay_us(__IO uint32_t nTime);
+///void delay_us(__IO uint32_t nTime);
+
+void delay_us(u32 nus);
+
+void delay_ms(u16 nms);
 
 //LED
 void LEDCtrl(LED_TYPE LEDType,uint8_t LEDState);
@@ -229,33 +261,34 @@ void ButtonConfig(void);
 ///u8 ButtonScan(u8);
 ///uint8_t KeyScan(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin);
 
-unsigned char IsAnyButtonPress(BUTTON_TYPE ButtonType);
+unsigned char IsAnyButtonPress(buttonType ButtonType);
 
 
 //TIMER
-void TIM3_PWM_INIT(void);
+void TIM2Config(void);
+void TIM3PWMConfig(void);
 
 
 /*
 void delay_us(u32 i);
 void delay_ms(u32 i);
 */
-
-static void AdcxGPIOConfig(void);
-static void AdcxModeConfig(void);
-void AdcConfig(void);
+static void ADCDMAConfig(void);
+static void ADCxGPIOConfig(void);
+static void ADCxModeConfig(void);
+void ADCConfig(void);
 u16 GetAdc(u8 ch);
 u16 GetAdcAverage(u8 ch,u8 times);
 
 float GetVoltageValue(void);
 
-//ADC Temperature Sensor
+//ADC fTemperature Sensor
 
-void TemperatureAdcConfig(void);
-u16 GetTemperatureAdc(u8 ch);
-u16 GetTemperatureAverage(void);
-u16 GetTemperatureAdcAverage(u8 ch,u8 times);
-short GetTemperatureValue(void);
+void fTemperatureAdcConfig(void);
+u16 GetfTemperatureAdc(u8 ch);
+u16 GetfTemperatureAverage(void);
+u16 GetfTemperatureAdcAverage(u8 ch,u8 times);
+short GetfTemperatureValue(void);
 
 //OLED_128*4*8控制用函数
 void OLEDConfig(void);

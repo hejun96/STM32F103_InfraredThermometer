@@ -1,4 +1,4 @@
-.\objects\bspadc.o: ..\02_USER\USER_SRC\BspAdc.c
+.\objects\bspadc.o: ..\02_USER\USER_SRC\BspADC.c
 .\objects\bspadc.o: ..\02_USER\USER_INC\global.h
 .\objects\bspadc.o: ..\00_CMSIS\C_inc\stm32f10x.h
 .\objects\bspadc.o: ..\00_CMSIS\C_inc\core_cm3.h

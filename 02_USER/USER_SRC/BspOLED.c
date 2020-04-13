@@ -16,6 +16,7 @@ void OLEDConfig(void)
 	OLED_SDIN_Set();
 	
 	delay_ms(200);
+	
 	OLED_WR_Byte(0xAE,OLED_CMD);//关闭显示
 	
 	OLED_WR_Byte(0x40,OLED_CMD);//---set low column address

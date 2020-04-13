@@ -20,16 +20,20 @@ static void BspInit()
 
 	NVICConfigAll();
 	
+	///EXTIConfig();
+	
 	USART1Config();
 
-	TIM3_PWM_INIT();
+	TIM2Config();
+	
+	TIM3PWMConfig();
 	
 	OLEDConfig();
 	
 	SMBus_Init();//MXL90614
 	
-	///TemperatureAdcConfig();//初始化STM32F1内部温度采集器
-	AdcConfig();
+	///fTemperatureAdcConfig();//初始化STM32F1内部温度采集器
+	ADCConfig();
 	
 	IWDGConfig(4,625);
 }
@@ -39,7 +43,7 @@ int main()
 	BspInit();
 	
 	//启动无操作界面	
-	OLED_DrawBMP(0,0,128,8,Peacock);
+	OLED_DrawBMP(0,0,128,8,Peacock);///OLED显示"海东青"图案
 	
 	while(1)
 	{

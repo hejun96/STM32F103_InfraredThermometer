@@ -11,7 +11,7 @@
 ".\objects\stm32f10x_tim.o"
 ".\objects\stm32f10x_usart.o"
 ".\objects\stm32f10x_iwdg.o"
-".\objects\bspadc.o"
+".\objects\stm32f10x_dma.o"
 ".\objects\gpio.o"
 ".\objects\stm32f10x_it.o"
 ".\objects\main.o"
@@ -24,6 +24,7 @@
 ".\objects\bspmlx90614.o"
 ".\objects\system.o"
 ".\objects\bspiwdg.o"
+".\objects\bspadc.o"
 ".\objects\sys.o"
 --strict --scatter ".\Objects\STM32F103_MDK.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols

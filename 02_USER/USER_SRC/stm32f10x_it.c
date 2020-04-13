@@ -197,8 +197,59 @@ void USART1_IRQHandler(void)
 		USART_SendData(USART1,res);//发数据到串口
 	}
 }
-
-
-
+//通用定时器中断
+void TIM2_IRQHandler(void)
+{
+	//溢出中断
+	if(TIM2->SR&0x0001)
+	{
+		//按键定时器中断
+		if(TIMER_RUN == SystemSta.s.ButtonTimerFlag)
+		{
+			SystemData.ButtonCnt++;
+		}
+		else if(TIMER_RESET == SystemSta.s.ButtonTimerFlag)
+		{
+			SystemData.ButtonCnt = 0;
+		}
+	}
+	
+	/*清除中断标志位*/
+	TIM2->SR&=~(1<<0);   
+}
+/*
+//按键中断
+volatile BUTTON_TYPE ButtonType = EN_BUTTON_TYPE_NONE;
+void EXTI15_10_IRQHandler(void)
+{
+	if(TIMER_RESET == SystemSta.s.ButtonTimerFlag)
+	{
+		SystemSta.s.ButtonTimerFlag = TIMER_RUN;
+		ButtonType = EN_BUTTON_TYPE_UP;
+	}
+	EXTI_ClearITPendingBit(EXTI_Line15);
+	
+	if(TIMER_RESET == SystemSta.s.ButtonTimerFlag)
+	{
+		SystemSta.s.ButtonTimerFlag = TIMER_RUN;
+		ButtonType = EN_BUTTON_TYPE_DOWN;
+	}
+	EXTI_ClearITPendingBit(EXTI_Line12);
+	
+	if(TIMER_RESET == SystemSta.s.ButtonTimerFlag)
+	{
+		SystemSta.s.ButtonTimerFlag = TIMER_RUN;
+		ButtonType = EN_BUTTON_TYPE_LEFT;
+	}
+	EXTI_ClearITPendingBit(EXTI_Line13);
+	
+	if(TIMER_RESET == SystemSta.s.ButtonTimerFlag)
+	{
+		SystemSta.s.ButtonTimerFlag = TIMER_RUN;
+		ButtonType = EN_BUTTON_TYPE_RIGHT;
+	}
+	EXTI_ClearITPendingBit(EXTI_Line14);
+}
+*/
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

@@ -52,7 +52,7 @@
           <OutputName>STM32F103_MDK</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
@@ -452,16 +452,16 @@
               <FileType>1</FileType>
               <FilePath>..\01_FWLIB\src\stm32f10x_iwdg.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\01_FWLIB\src\stm32f10x_dma.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>03_USER</GroupName>
           <Files>
-            <File>
-              <FileName>BspAdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\02_USER\USER_SRC\BspAdc.c</FilePath>
-            </File>
             <File>
               <FileName>GPIO.c</FileName>
               <FileType>1</FileType>
@@ -521,6 +521,11 @@
               <FileName>BspIWDG.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\02_USER\USER_SRC\BspIWDG.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspADC.c</FilePath>
             </File>
           </Files>
         </Group>

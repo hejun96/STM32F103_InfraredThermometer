@@ -1,8 +1,8 @@
 #include "global.h"
 
-volatile BUTTON_TYPE ButtonType;//按键类型变量
-volatile STA_UNION SystemSta;
 
+volatile STA_UNION SystemSta;
+volatile DATA_STRUCT SystemData;
 
 //温度的单位 ℃
 uint8_t TempCompany[][16]=
@@ -29,14 +29,14 @@ void InfraredThermometerTask()
 {
 	uint8_t i,j;
 	
-	
+	BUTTON_TYPE ButtonType;
 	float Temperature = 0;//温度数据变量
-	char TempValue[80] = {0};//温度值(字符串)
-	char VoltageValueStr[80] = {0};//电压值(字符串)
-	float VoltageValue = 0.0;//Vsimple电压值变量
-	float VBAT = 0.0;//锂电池电压的变量值
+	char ucTempValue[80] = {0};//温度值(字符串)
+	char ucVoltageValueStr[80] = {0};//电压值(字符串)
+	float fVoltageValue = 0.0;//Vsimple电压值变量
+	float fVBAT = 0.0;//锂电池电压的变量值
 	
-	if(IsAnyButtonPress(ButtonType) == BUTTON_ON)
+	if(IsAnyButtonPress(&ButtonType) == BUTTON_ON)
 	{
 		switch((uint8_t)ButtonType)
 		{
@@ -59,8 +59,8 @@ void InfraredThermometerTask()
 				}
 				
 				Temperature = SMBus_ReadTemp();//读取温度
-				sprintf(TempValue,"%.1f",Temperature);//浮点型转换为字符串
-				OLED_ShowString(40,2,(uint8_t *)TempValue,16);   //显示温度
+				sprintf(ucTempValue,"%.1f",Temperature);//浮点型转换为字符串
+				OLED_ShowString(40,2,(uint8_t *)ucTempValue,16);   //显示温度
 				
 				//发热分为： 低热 ：37.2～38℃；中等度热：38．1～39℃：高热：39．1～41℃； 超高热 ：41℃以上
 				//低烧预警
@@ -124,30 +124,30 @@ void InfraredThermometerTask()
 				SystemSta.s.VolCleanScreenFlag = FLAG_OFF;//清除电压清屏的标志位
 				break;
 				
-			//下按键:实现采集电压功能，并在显示屏显示
-			case EN_BUTTON_TYPE_DOWN://下按键
+			//右按键:实现采集电压功能，并在显示屏显示
+			case EN_BUTTON_TYPE_RIGHT:///EN_BUTTON_TYPE_DOWN://下按键
 				if(SystemSta.s.CollectionFlag != FLAG_OFF)
 				{
-					//进入该模式，只请一次屏
-					if(SystemSta.s.CollectionFlag == FLAG_OFF)
+					//进入该模式，只清一次屏
+					if(SystemSta.s.VolCleanScreenFlag == FLAG_OFF)
 					{
 						OLED_DataClear();//清除数据行的屏幕信息
 						OLED_ShowChar(80,2,'V',16);
 						SystemSta.s.VolCleanScreenFlag++;
 					}
 					
-					VoltageValue = GetVoltageValue();
+					fVoltageValue = GetVoltageValue();
 					//由于板子在电压采集的电路中加了电阻，所以在串联电路中，电阻起到的作用是:分压
-					//故,锂电池的电压VBAT = VoltageValue*(10K + 10K)/10K
+					//故,锂电池的电压VBAT = fVoltageValue*(10K + 10K)/10K
 					
-					VBAT = VoltageValue * (10 + 10)/10;
-					sprintf(VoltageValueStr,"%.2f",VBAT);//浮点型转换为字符串
+					fVBAT = fVoltageValue * (10 + 10)/10;
+					sprintf(ucVoltageValueStr,"%.2f",fVBAT);//浮点型转换为字符串
 					//由于板子在电压采集的电路中加入了电阻所以加1.2V
-					sprintf(VoltageValueStr,"%.2f",(VoltageValue + 1.20));//浮点型转换为字符串
-					OLED_ShowString(40,2,(uint8_t *)VoltageValueStr,16);//显示温度
+					sprintf(ucVoltageValueStr,"%.2f",(fVoltageValue + 1.20));//浮点型转换为字符串
+					OLED_ShowString(40,2,(uint8_t *)ucVoltageValueStr,16);//显示温度
 					
 					//低压预警
-					if(VoltageValue < 1.5)
+					if(fVoltageValue < 1.5)
 					{
 						for(i=0;i<5;i++)//闪烁5次
 						{
@@ -175,7 +175,7 @@ void InfraredThermometerTask()
 				break;
 			
 			//进入选择界面
-			case EN_BUTTON_TYPE_RIGHT:
+			case EN_BUTTON_TYPE_DOWN:
 				
 				OLED_Clear();//清屏
 				delay_ms(500);
@@ -189,4 +189,7 @@ void InfraredThermometerTask()
 				break;
 		}		
 	}
+	
+	
 }
+

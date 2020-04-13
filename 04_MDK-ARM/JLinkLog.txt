@@ -1,13 +1,44 @@
-
-T0E68 108:726 SEGGER J-Link V6.32i Log File (0031ms, 0242ms total)
-T0E68 108:726 DLL Compiled: Jul 24 2018 15:19:55 (0031ms, 0242ms total)
-T0E68 108:726 Logging started @ 2020-03-20 07:49 (0031ms, 0242ms total)
-T0E68 108:757 JLINK_SetWarnOutHandler(...) (0013ms, 0255ms total)
-T0E68 108:770 JLINK_OpenEx(...)
-  ***** Error: Cannot connect to J-Link via USB.  returns "Cannot connect to J-Link via USB." (0064ms, 0319ms total)
-
-  ***** API Error: API JLINK_GetHardwareVersion function called before JLINKARM_Open()
-T0E68 108:835 
-  ***** Error: Cannot connect to J-Link via USB.JLINK_Close() (0001ms, 0335ms total)
-T0E68 110:779  (0001ms, 0335ms total)
-T0E68 110:779 Closed (0001ms, 0335ms total)
+T0CA8 879:529 SEGGER J-Link V6.32i Log File (0001ms, 6994ms total)
+T0CA8 879:529 DLL Compiled: Jul 24 2018 15:19:55 (0002ms, 6995ms total)
+T0CA8 879:529 Logging started @ 2020-04-08 21:57 (0002ms, 6995ms total)
+T0CA8 879:532 JLINK_SetWarnOutHandler(...) (0000ms, 6996ms total)
+T0CA8 879:532 JLINK_OpenEx(...)
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N: 20090928
+Feature(s): RDI,FlashDL,FlashBP,JFlash,GDBFull
+TELNET listener socket opened on port 19021WEBSRV 
+Starting webserver (0028ms, 7024ms total)
+T0CA8 879:532 WEBSRV Webserver running on local port 19080 (0030ms, 7026ms total)
+T0CA8 879:532   returns O.K. (0031ms, 7027ms total)
+T0CA8 879:563 JLINK_GetEmuCaps()  returns 0x88EA5833 (0001ms, 7028ms total)
+T0CA8 879:564 JLINK_TIF_GetAvailable(...) (0001ms, 7029ms total)
+T0CA8 879:566 JLINK_SetErrorOutHandler(...) (0001ms, 7030ms total)
+T0CA8 879:567 JLINK_ExecCommand("ProjectFile = "F:\EmbededData\DongFangqing\STM32F103_InfraredThermometer_ V0.0_20200401\github\04_MDK-ARM\JLinkSettings.ini"", ...).   returns 0x00 (0008ms, 7038ms total)
+T0CA8 879:575 JLINK_ExecCommand("Device = STM32F103C8", ...). Device "STM32F103C8" selected.  returns 0x00 (0005ms, 7044ms total)
+T0CA8 879:582 JLINK_ExecCommand("DisableConnectionTimeout", ...).   returns 0x01 (0000ms, 7045ms total)
+T0CA8 879:583 JLINK_GetHardwareVersion()  returns 0x11170 (0001ms, 7046ms total)
+T0CA8 879:584 JLINK_GetDLLVersion()  returns 63209 (0000ms, 7046ms total)
+T0CA8 879:585 JLINK_GetFirmwareString(...) (0000ms, 7046ms total)
+T0CA8 879:585 JLINK_GetDLLVersion()  returns 63209 (0001ms, 7047ms total)
+T0CA8 879:586 JLINK_GetCompileDateTime() (0000ms, 7047ms total)
+T0CA8 879:587 JLINK_GetFirmwareString(...) (0000ms, 7047ms total)
+T0CA8 879:587 JLINK_GetHardwareVersion()  returns 0x11170 (0001ms, 7048ms total)
+T0CA8 879:588 JLINK_TIF_Select(JLINKARM_TIF_JTAG)  returns 0x00 (0007ms, 7055ms total)
+T0CA8 879:596 JLINK_SetSpeed(5000) (0001ms, 7057ms total)
+T0CA8 879:598 JLINK_SetResetType(JLINKARM_RESET_TYPE_NORMAL)  returns JLINKARM_RESET_TYPE_NORMAL (0001ms, 7059ms total)
+T0CA8 879:600 JLINK_Reset() >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>STM32 (connect): Can not attach to CPU. Trying connect under reset. >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>
+  ***** Error: STM32: Connecting to CPU via connect under reset failed. >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>STM32 (connect): Can not attach to CPU. Trying connect under reset. >0x2F8 JTAG>
+Could not measure total IR len. TDO is constant high. >0xC8 JTAG>
+  ***** Error: STM32: Connecting to CPU via connect under reset failed.JLINK_GetIdData(...) >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>STM32 (connect): Can not attach to CPU. Trying connect under reset. >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>
+  ***** Error: STM32: Connecting to CPU via connect under reset failed. >0x2F8 JTAG>
+Could not measure total IR len. TDO is constant high. >0xC8 JTAG>STM32 (connect): Can not attach to CPU. Trying connect under reset. >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>
+  ***** Error: STM32: Connecting to CPU via connect under reset failed. (0551ms, 7908ms total)
+T0CA8 880:453 JLINK_GetIdData(...) >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>STM32 (connect): Can not attach to CPU. Trying connect under reset. >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>
+  ***** Error: STM32: Connecting to CPU via connect under reset failed. >0x2F8 JTAG>Could not measure total IR len. TDO is constant high. >0xC8 JTAG>STM32 (connect): Can not attach to CPU. Trying connect under reset. >0x2F8 JTAG>
+Could not measure total IR len. TDO is constant high. >0xC8 JTAG>
+  ***** Error: STM32: Connecting to CPU via connect under reset failed. (0357ms, 8265ms total)
+T0CA8 880:817 JLINK_GetFirmwareString(...) (0000ms, 8265ms total)
+T0CA8 882:385 JLINK_Close() (0013ms, 8278ms total)
+T0CA8 882:385  (0014ms, 8279ms total)
+T0CA8 882:385 Closed (0014ms, 8279ms total)

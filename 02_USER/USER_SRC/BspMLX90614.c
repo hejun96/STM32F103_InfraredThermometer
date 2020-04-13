@@ -7,6 +7,8 @@
 * Output         : None
 * Return         : None
 *******************************************************************************/
+
+//模拟II2时序
 void SMBus_StartBit(void)
 {
     SMBUS_SDA_H();		// Set SDA line
@@ -343,7 +345,7 @@ uint8_t PEC_Calculation(uint8_t pec[])
 
  /*******************************************************************************
  * Function Name  : SMBus_ReadTemp
- * Description    : Calculate and return the temperature
+ * Description    : Calculate and return the fTemperature
  * Input          : None
  * Output         : None
  * Return         : SMBus_ReadMemory(0x00, 0x07)*0.02-273.15
