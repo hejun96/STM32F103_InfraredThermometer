@@ -345,7 +345,7 @@ uint8_t PEC_Calculation(uint8_t pec[])
 
  /*******************************************************************************
  * Function Name  : SMBus_ReadTemp
- * Description    : Calculate and return the fTemperature
+ * Description    : Calculate and return the Temperature
  * Input          : None
  * Output         : None
  * Return         : SMBus_ReadMemory(0x00, 0x07)*0.02-273.15

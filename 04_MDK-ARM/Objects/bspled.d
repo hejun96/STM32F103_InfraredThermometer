@@ -1,4 +1,4 @@
-.\objects\bspled.o: ..\02_USER\USER_SRC\BspLed.c
+.\objects\bspled.o: ..\02_USER\USER_SRC\BspLED.c
 .\objects\bspled.o: ..\02_USER\USER_INC\global.h
 .\objects\bspled.o: ..\00_CMSIS\C_inc\stm32f10x.h
 .\objects\bspled.o: ..\00_CMSIS\C_inc\core_cm3.h

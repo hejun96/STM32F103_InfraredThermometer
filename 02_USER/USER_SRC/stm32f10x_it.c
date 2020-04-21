@@ -206,12 +206,23 @@ void TIM2_IRQHandler(void)
 		//按键定时器中断
 		if(TIMER_RUN == SystemSta.s.ButtonTimerFlag)
 		{
-			SystemData.ButtonCnt++;
+			SystemData.usButtonCnt++;
 		}
 		else if(TIMER_RESET == SystemSta.s.ButtonTimerFlag)
 		{
-			SystemData.ButtonCnt = 0;
+			SystemData.usButtonCnt = 0;
 		}
+		
+		if(TIMER_RUN == SystemSta.s.StandbyTimerFlag)
+		{
+			SystemData.usStandbyCnt++;
+		}
+		if(TIMER_RESET == SystemSta.s.StandbyTimerFlag)
+		{
+			SystemData.usStandbyCnt = 0;
+		}
+		
+		
 	}
 	
 	/*清除中断标志位*/

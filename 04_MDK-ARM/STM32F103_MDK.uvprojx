@@ -134,11 +134,11 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>-1</DriverSelection>
+            <DriverSelection>4101</DriverSelection>
           </Flash1>
-          <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <bUseTDR>0</bUseTDR>
+          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -457,6 +457,16 @@
               <FileType>1</FileType>
               <FilePath>..\01_FWLIB\src\stm32f10x_dma.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f10x_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\01_FWLIB\src\stm32f10x_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\01_FWLIB\src\stm32f10x_pwr.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -481,11 +491,6 @@
               <FileName>BspButton.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\02_USER\USER_SRC\BspButton.c</FilePath>
-            </File>
-            <File>
-              <FileName>BspLed.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\02_USER\USER_SRC\BspLed.c</FilePath>
             </File>
             <File>
               <FileName>BspUsart.c</FileName>
@@ -526,6 +531,26 @@
               <FileName>BspADC.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\02_USER\USER_SRC\BspADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspFlash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspFlash.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspPower.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspPower.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspI2C.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspI2C.c</FilePath>
+            </File>
+            <File>
+              <FileName>BspLED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\02_USER\USER_SRC\BspLED.c</FilePath>
             </File>
           </Files>
         </Group>

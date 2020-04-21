@@ -19,6 +19,9 @@ void RCCConfigAll(void)
 	
 	//DMA
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
+	
+	//POWER
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR,ENABLE);//使能PWM外设时钟
 }
 
 void GPIOConfigAll(void)	
@@ -44,7 +47,7 @@ void GPIOConfigAll(void)
 	
 	//B Output	PB1-BUZZER PB6-I2C1_SCL PB7-I2C1_SDA
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;//推挽输出，PB1无源蜂鸣器
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_6|GPIO_Pin_7;//
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;///|GPIO_Pin_6|GPIO_Pin_7;//
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//速率
 	GPIO_Init(GPIOB,&GPIO_InitStructure);
 	GPIO_SetBits(BUZZER_GPIO_PORT,BUZZER_GPIO_PIN);//输出1，关闭蜂鸣器
@@ -127,7 +130,7 @@ void EXTIConfig(void)
 {
 	EXTI_InitTypeDef EXTI_InitStructure;
 	
-	//GPIOB.15-fTemperature_BUTTON 中断线以及中断初始化 下降沿触发
+	//GPIOB.15-Temperature_BUTTON 中断线以及中断初始化 下降沿触发
 	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB,GPIO_PinSource15);
 	EXTI_InitStructure.EXTI_Line = EXTI_Line15;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;

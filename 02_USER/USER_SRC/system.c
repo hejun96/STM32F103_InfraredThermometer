@@ -1,10 +1,13 @@
 #include "global.h"
+///#include "BspI2C.h"
 
 
 volatile STA_UNION SystemSta;
 volatile DATA_STRUCT SystemData;
 
-//温度的单位 ℃
+
+
+//温度的单位 ℃,OLED显示"℃",用字库的方式导入
 uint8_t TempCompany[][16]=
 {
 	0x06,0x09,0x09,0xE6,0xF8,0x0C,0x04,0x02,0x02,0x02,0x02,0x02,0x04,0x1E,0x00,0x00,
@@ -24,8 +27,10 @@ void BuzzerVoiceRegulation(uint8_t VoiceSize)
 	TIM3->CCR4 = VoiceSize;
 }
 
-//红外测温传感器任务进程
-void InfraredThermometerTask()
+
+
+//按键任务进程
+void ButtonTask()
 {
 	uint8_t i,j;
 	
@@ -136,7 +141,7 @@ void InfraredThermometerTask()
 						SystemSta.s.VolCleanScreenFlag++;
 					}
 					
-					fVoltageValue = GetVoltageValue();
+					fVoltageValue = GetVoltageValue();///Get_VoltageValue();
 					//由于板子在电压采集的电路中加了电阻，所以在串联电路中，电阻起到的作用是:分压
 					//故,锂电池的电压VBAT = fVoltageValue*(10K + 10K)/10K
 					
@@ -189,7 +194,5 @@ void InfraredThermometerTask()
 				break;
 		}		
 	}
-	
-	
 }
 

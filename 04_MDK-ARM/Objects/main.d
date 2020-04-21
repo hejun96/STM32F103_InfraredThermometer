@@ -33,3 +33,4 @@
 .\objects\main.o: ..\03_SYSTEM\03_SYSTEM_INC\sys.h
 .\objects\main.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\main.o: ..\02_USER\USER_INC\bmp.h
+.\objects\main.o: ..\02_USER\USER_INC\BspI2C.h

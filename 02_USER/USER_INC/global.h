@@ -87,7 +87,7 @@
 
 //DMA
 /*采集的通道数*/
-#define SAMPLE_CHANNEL_NUM  		(5)
+#define SAMPLE_CHANNEL_NUM  		(1)//只需要1个DMA通道///(5)
 
 /*一次采集的次数*/
 #define SAMPLE_COUNT  				(10)  
@@ -106,6 +106,12 @@
 #define ADC_IRQ						ADC1_2_IRQn
 #define ADC_IRQHandler				ADC1_2_IRQHnadler
 
+/*
+#define DEVICE_I2C					1
+
+#define	I2C_WR						0//写控制bit
+#define I2C_RD						1//读控制bit
+*/
 
 //OLED_128*4*8
 #define OLED_MODE 					0
@@ -156,7 +162,18 @@
 //#define SMBUS_SDA_PIN()	    	SMBUS_PORT->IDR & SMBUS_SDA //读取引脚电平
 #define SMBUS_SDA_PIN() 			GPIO_ReadInputDataBit(SMBUS_PORT, SMBUS_SDA)
 
+//用户根据自己的需要设置
+#define STM32_FLASH_SIZE 64 	 		//所选STM32的FLASH容量大小(单位为K) STM32F103C8T6 是64K 
+#define STM32_FLASH_WREN 1              //使能FLASH写入(0，不是能;1，使能)
 
+
+//FLASH起始地址
+#define STM32_FLASH_BASE 0x08000000 	//STM32 FLASH的起始地址  
+
+//STM32F103C8T6保存地址  0X0800FFFF  (0X0800FFF - 0X08000000)/1024 = 63K
+
+
+//结构体，枚举体定义
 enum
 {
 	FLAG_OFF = 0,
@@ -201,6 +218,8 @@ typedef union
 		u32 VolCleanScreenFlag:2;//电压清屏标志位 0:复位 1:运行 2:完成 3:暂停
 		u32 CollectionFlag:2;//采集数据标志位 0:复位 1:运行 2:完成 3:暂停
 		u32 ButtonTimerFlag:2;//按钮运行时间标志位 0:复位 1:运行 2:完成 3:暂停
+		u32 StandbyTimerFlag:2;//低功耗待机标志位 0:复位 1:运行 2:完成 3:暂停
+		
 	}s;
 
 }STA_UNION;
@@ -208,11 +227,48 @@ extern volatile STA_UNION SystemSta;
 
 typedef struct
 {
-	u32 ButtonCnt;
-	
+	u16 usButtonCnt;
+	u16 usStandbyCnt;
 
 }DATA_STRUCT;
 extern volatile DATA_STRUCT SystemData;
+
+
+/*
+//封装描述软件I2C的操作函数集 File Operations 
+struct SofI2CFOps
+{
+	void (*GPIOSet)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
+	void (*GPIOReset)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
+	uint8_t (*GPIOReadBit)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//读取GPIO电平
+	///void (*delay_ms)(u16 nms);
+	void (*delay_us)(u32 nus);
+};
+//
+struct SofI2CInit
+{
+	uint32_t SDaPeriphClock;//SDA RCC时钟
+	uint32_t SClPeriphClock;//SCL RCC时钟
+	GPIO_TypeDef* SDaGPIOx;
+	GPIO_TypeDef* SClGPIOx;
+
+};
+
+typedef struct __ArgSofI2CTypeDef
+{
+	struct SofI2CInit port;
+	uint32_t scl;
+	uint32_t sda;
+	uint32_t TimeOut;
+	struct SofI2CFOps FOps;
+
+}SofI2CTypeDef;
+
+typedef struct __ArgI2CDevice{
+	SofI2CTypeDef* SofI2C;
+	uint8_t SlaveAddr;
+}I2CDevice;
+*/
 
 //函数声明
 
@@ -282,13 +338,30 @@ u16 GetAdcAverage(u8 ch,u8 times);
 
 float GetVoltageValue(void);
 
-//ADC fTemperature Sensor
+static void Voltage_ADC_Filter(void);
+float Get_VoltageValue(void);
+//ADC Temperature Sensor
 
-void fTemperatureAdcConfig(void);
-u16 GetfTemperatureAdc(u8 ch);
-u16 GetfTemperatureAverage(void);
-u16 GetfTemperatureAdcAverage(u8 ch,u8 times);
-short GetfTemperatureValue(void);
+void TemperatureAdcConfig(void);
+u16 GetTemperatureAdc(u8 ch);
+u16 GetTemperatureAverage(void);
+u16 GetTemperatureAdcAverage(u8 ch,u8 times);
+short GetTemperatureValue(void);
+
+/*
+//I2C集(暂时只用到OLED和传感器)
+extern SofI2CTypeDef SofI2COLED;
+void I2CDelayUs(u32 nus);
+void I2CGPIOConfig(SofI2CTypeDef* SofI2CInode);
+static void SDaOut(SofI2CTypeDef* SofI2CInode);
+static void SDaIn(SofI2CTypeDef* SofI2CInode);
+void I2CStart(SofI2CTypeDef* SofI2CInode);
+void I2CStop(SofI2CTypeDef* SofI2CInode);
+void I2CSendACK(SofI2CTypeDef* SofI2CInode,uint8_t ack);
+*/
+
+
+
 
 //OLED_128*4*8控制用函数
 void OLEDConfig(void);
@@ -329,13 +402,38 @@ uint16_t SMBus_ReadMemory(uint8_t slaveAddress, uint8_t command);
 uint8_t PEC_Calculation(uint8_t pec[]);
 float SMBus_ReadTemp(void);
 
+void SMBus_SendBit(uint8_t bit_out);
+uint8_t SMBus_ReceiveBit(void);
+void SMBus_Delay(uint16_t time);
+
+
+//STMFlash
+//STM32F103 FLASH
+
+//FLASH解锁键值
+ 
+
+u16 STMFLASH_ReadHalfWord(u32 faddr);		  //读出半字  
+void STMFLASH_WriteLenByte(u32 WriteAddr,u32 DataToWrite,u16 Len);	//指定地址开始写入指定长度的数据
+u32 STMFLASH_ReadLenByte(u32 ReadAddr,u16 Len);						//指定地址开始读取指定长度数据
+void STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite);		//从指定地址开始写入指定长度的数据
+void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead);   		//从指定地址开始读出指定长度的数据
+
+//测试写入
+void Test_Write(u32 WriteAddr,u16 WriteData);
+
+
+//POWER
+void SysEnterStandby(void);
+
 //Bsp --- Board Support Pakeage
 static void BspInit();
 
 
+
 //system
 void BuzzerVoiceRegulation(uint8_t VoiceSize);
-void InfraredThermometerTask();
+void ButtonTask();
 extern unsigned char BMP1[]; 
 extern unsigned char Peacock[]; 
 #endif

@@ -4,13 +4,16 @@
 /*采集存放的AD值*/
 volatile u16 ADC_ConvertedValue[SAMPLE_CHANNEL_NUM*SAMPLE_COUNT]; 
 
+///__IO uint16_t ADC_ConvertedValue[50];
+
+__IO uint16_t After_filter;//用来存放求平均值之后的结果
 //PA7-Voltage ADC
 static void ADCxGPIOConfig(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	//1.配置ADC_IO引脚模式，模拟输入
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;//ADC对应PA1口
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;//ADC对应PA7口
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;//模拟输入
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
@@ -134,6 +137,9 @@ u16 GetAdcAverage(u8 ch,u8 times)
 	return AdcAverageValue/times;
 }
 
+
+
+
 float GetVoltageValue(void)
 {
 	u16 adcx;
@@ -142,3 +148,30 @@ float GetVoltageValue(void)
 	adcx = GetAdcAverage(ADC_Channel_7,10);//PA7-AD_IN7，采集10次
 	fValue = (float)adcx*(3.3/4096);
 }
+
+
+/*
+//求平均值函数
+static void Voltage_ADC_Filter(void)
+{
+	int sum = 0;
+	uint8_t count;
+	
+	for(count=0;count<50;count++)
+	{
+		sum += ADC_ConvertedValue[count];
+	
+	}
+	After_filter = sum/50;
+}
+
+float Get_VoltageValue(void)
+{
+	float Value;
+	Voltage_ADC_Filter();
+	
+	Value = (float)After_filter*(float)3.3/4096;
+	return Value;
+}
+
+*/

@@ -1,6 +1,6 @@
 #include "global.h"
 #include "oledfont.h"
-
+///#include "BspI2C.h"
 
 //OLED 128 * 4 * 8
 
@@ -8,6 +8,8 @@
 //VCC   接5V或3.3v电源
 //SCL   接PD6（SCL）
 //SDA   接PD7（SDA）            
+
+
 
 void OLEDConfig(void)
 {
@@ -60,6 +62,8 @@ void OLEDConfig(void)
 /**********************************************
 //IIC Start
 **********************************************/
+
+
 void IIC_Start(void)
 {
 
@@ -68,6 +72,8 @@ void IIC_Start(void)
 	OLED_SDIN_Clr();
 	OLED_SCLK_Clr();
 }
+
+
 
 /**********************************************
 //IIC Stop
