@@ -14,30 +14,29 @@ static void BspInit()
 {
 	SysTick_Init();
 	
-	RCCConfigAll();
+	rccConfigAll();
 	
-	GPIOConfigAll();
+	gpioConfigAll();
 
-	NVICConfigAll();
+	nvicConfigAll();
 	
-	///EXTIConfig();
+	///extiConfig();
 	
-	USART1Config();
+	usart1ConfigAll();
 
-	TIM2Config();
+	tim2Config();
 	
-	TIM3PWMConfig();
+	tim3PwmConfig();
 	
-	SofI2CInit();//OLED GPIO初始化
-	
-	OLEDConfig();
+	oledInit(&sofI2cOled);
+	///oledConfig();
 	
 	SMBus_Init();//MXL90614
 	
-	///TemperatureAdcConfig();//初始化STM32F1内部温度采集器
-	ADCConfig();
+	///TemperatureadcConfig();//初始化STM32F1内部温度采集器
+	adcConfig();
 	
-	IWDGConfig(4,625);
+	iwdgConfig(4,625);
 }
 
 int main()

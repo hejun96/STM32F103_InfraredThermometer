@@ -11,7 +11,7 @@
 
 
 
-void OLEDConfig(void)
+void oledConfig(void)
 {
 	//空闲电平
 	OLED_SCLK_Set();

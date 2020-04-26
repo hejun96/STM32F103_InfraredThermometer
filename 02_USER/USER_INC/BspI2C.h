@@ -11,53 +11,60 @@
 #define I2C_RD						1//读控制bit
 
 //封装描述软件I2C的操作函数集 File Operations 
-struct SofI2CFOps
+struct sofI2cFops
 {
-	void (*GPIOSet)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
-	void (*GPIOReset)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
-	uint8_t (*GPIOReadBit)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//读取GPIO电平
-	///void (*delay_ms)(u16 nms);
+	void (*GpioSet)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
+	void (*GpioReset)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
+	uint8_t (*GpioReadBit)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//读取GPIO电平
+	
 	void (*delay_us)(u32 nus);
+	void (*delay_ms)(u16 nms);
 };
 //
-struct SofI2CInit
+struct sofI2cInit
 {
-	uint32_t SDaPeriphClock;//SDA RCC时钟
-	uint32_t SClPeriphClock;//SCL RCC时钟
-	GPIO_TypeDef* SDaGPIOx;
-	GPIO_TypeDef* SClGPIOx;
+	uint32_t sdaPeriphClock;//SDA RCC时钟
+	uint32_t sclPeriphClock;//SCL RCC时钟
+	GPIO_TypeDef* sdaGpiox;
+	GPIO_TypeDef* sclGpiox;
 
 };
 
 typedef struct __ArgSofI2CTypeDef
 {
-	struct SofI2CInit port;
+	struct sofI2cInit port;
 	uint32_t scl;
 	uint32_t sda;
 	uint32_t TimeOut;
-	struct SofI2CFOps FOps;
+	struct sofI2cFops Fops;
 
 }SofI2CTypeDef;
 
-typedef struct __ArgI2CDevice{
+typedef struct __Argi2cDevice
+{
 	SofI2CTypeDef* SofI2C;
 	uint8_t SlaveAddr;
-}I2CDevice;
+}i2cDevice;
 
-extern SofI2CTypeDef SofI2COLED;
+extern SofI2CTypeDef sofI2cOled;
 
 //I2C集(暂时只用到OLED和传感器)
 
 
-void I2CGPIOConfig(SofI2CTypeDef* SofI2CInode);
-void I2CDelayUs(u32 nus);
-void I2CGPIOConfig(SofI2CTypeDef* SofI2CInode);
-static void SDaOut(SofI2CTypeDef* SofI2CInode);
-static void SDaIn(SofI2CTypeDef* SofI2CInode);
-void I2CStart(SofI2CTypeDef* SofI2CInode);
-void I2CStop(SofI2CTypeDef* SofI2CInode);
-void I2CSendACK(SofI2CTypeDef* SofI2CInode,uint8_t ack);
-void SofI2CInit();
+
+void i2cDelayUs(u32 nus);
+void i2cDelayMs(u16 nms);
+
+void i2cGpioConfig(SofI2CTypeDef* sofI2cInode);
+static void sdaOut(SofI2CTypeDef* sofI2cInode);
+static void sdaIn(SofI2CTypeDef* sofI2cInode);
+void i2cStart(SofI2CTypeDef* sofI2cInode);
+void i2cStop(SofI2CTypeDef* sofI2cInode);
+void i2cSendAck(SofI2CTypeDef* sofI2cInode,uint8_t ack);
+
+void oledWriteByte(unsigned data,unsigned cmd);
+void oledInit(SofI2CTypeDef* sofI2cInode);
+
 #endif
 
 #endif

@@ -1,6 +1,6 @@
 #include "global.h"
 
-void RCCConfigAll(void)
+void rccConfigAll(void)
 {
 	//GPIO
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB,ENABLE);//GPIOA,GPIOB
@@ -24,7 +24,7 @@ void RCCConfigAll(void)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR,ENABLE);//使能PWM外设时钟
 }
 
-void GPIOConfigAll(void)	
+void gpioConfigAll(void)	
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -54,7 +54,7 @@ void GPIOConfigAll(void)
 	
 }
 
-static void NVIC_USART1(void)
+static void nvicUsart1(void)
 {
 	//5.开启中断并且初始化NVIC 
 	NVIC_InitTypeDef NVIC_InitStructure;
@@ -80,7 +80,7 @@ static void NVIC_USART1(void)
 
 
 //中断优先级配置
-static void NVIC_TIMER2(void)
+static void nvicTimer2(void)
 {
     NVIC_InitTypeDef NVIC_InitStructure; 
     // 设置中断组为0
@@ -96,7 +96,7 @@ static void NVIC_TIMER2(void)
 }
 
 //按键的外部中断
-static void NVIC_EXTI(void)
+static void nvicExti(void)
 {
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
@@ -118,15 +118,15 @@ static void NVIC_EXTI(void)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-void NVICConfigAll(void)
+void nvicConfigAll(void)
 {
-	NVIC_USART1();
-	NVIC_TIMER2();
-	///NVIC_EXTI();
+	nvicUsart1();
+	nvicTimer2();
+	///nvicExti();
 }
 
 
-void EXTIConfig(void)
+void extiConfig(void)
 {
 	EXTI_InitTypeDef EXTI_InitStructure;
 	

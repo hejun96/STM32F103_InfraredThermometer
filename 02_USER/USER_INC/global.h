@@ -236,38 +236,38 @@ extern volatile DATA_STRUCT SystemData;
 
 /*
 //封装描述软件I2C的操作函数集 File Operations 
-struct SofI2CFOps
+struct sofI2cFops
 {
-	void (*GPIOSet)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
-	void (*GPIOReset)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
-	uint8_t (*GPIOReadBit)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//读取GPIO电平
+	void (*GpioSet)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
+	void (*GpioReset)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//设置GPIO输出高
+	uint8_t (*GpioReadBit)(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);//读取GPIO电平
 	///void (*delay_ms)(u16 nms);
 	void (*delay_us)(u32 nus);
 };
 //
-struct SofI2CInit
+struct sofI2cInit
 {
-	uint32_t SDaPeriphClock;//SDA RCC时钟
-	uint32_t SClPeriphClock;//SCL RCC时钟
-	GPIO_TypeDef* SDaGPIOx;
-	GPIO_TypeDef* SClGPIOx;
+	uint32_t sdaPeriphClock;//SDA RCC时钟
+	uint32_t sclPeriphClock;//SCL RCC时钟
+	GPIO_TypeDef* sdaGpiox;
+	GPIO_TypeDef* sclGpiox;
 
 };
 
 typedef struct __ArgSofI2CTypeDef
 {
-	struct SofI2CInit port;
+	struct sofI2cInit port;
 	uint32_t scl;
 	uint32_t sda;
 	uint32_t TimeOut;
-	struct SofI2CFOps FOps;
+	struct sofI2cFops FOps;
 
 }SofI2CTypeDef;
 
-typedef struct __ArgI2CDevice{
+typedef struct __Argi2cDevice{
 	SofI2CTypeDef* SofI2C;
 	uint8_t SlaveAddr;
-}I2CDevice;
+}i2cDevice;
 */
 
 //函数声明
@@ -277,16 +277,16 @@ typedef struct __ArgI2CDevice{
 void TimingDelay_Decrement(void);
 
 //GPIO
-void RCCConfigAll(void);
-void GPIOConfigAll(void);
+void rccConfigAll(void);
+void gpioConfigAll(void);
 
-static void NVIC_USART1(void);
-void NVIC_TIMER2(void);
-void NVIC_EXTI(void);
+static void nvicUsart1(void);
+void nvicTimer2(void);
+void nvicExti(void);
 
-void NVICConfigAll(void);
+void nvicConfigAll(void);
 
-void EXTIConfig(void);
+void extiConfig(void);
 //SysTick
 void SysTick_Init(void);
 ///void delay_us(__IO uint32_t nTime);
@@ -303,7 +303,7 @@ void LEDCtrl(LED_TYPE LEDType,uint8_t LEDState);
 
 
 
-void USART1Config(void);//串口初始化
+void usart1ConfigAll(void);//串口初始化
 extern u8  USART_RX_BUF[USART_REC_LEN]; //接收缓冲,最大USART_REC_LEN个字节.末字节为换行符 
 extern u16 USART_RX_STA;         		//接收状态标记		
 //如果想串口中断接收，请不要注释以下宏定义
@@ -321,8 +321,8 @@ unsigned char IsAnyButtonPress(buttonType ButtonType);
 
 
 //TIMER
-void TIM2Config(void);
-void TIM3PWMConfig(void);
+void tim2Config(void);
+void tim3PwmConfig(void);
 
 
 /*
@@ -332,7 +332,7 @@ void delay_ms(u32 i);
 static void ADCDMAConfig(void);
 static void ADCxGPIOConfig(void);
 static void ADCxModeConfig(void);
-void ADCConfig(void);
+void adcConfig(void);
 u16 GetAdc(u8 ch);
 u16 GetAdcAverage(u8 ch,u8 times);
 
@@ -342,7 +342,7 @@ static void Voltage_ADC_Filter(void);
 float Get_VoltageValue(void);
 //ADC Temperature Sensor
 
-void TemperatureAdcConfig(void);
+void TemperatureadcConfig(void);
 u16 GetTemperatureAdc(u8 ch);
 u16 GetTemperatureAverage(void);
 u16 GetTemperatureAdcAverage(u8 ch,u8 times);
@@ -350,21 +350,21 @@ short GetTemperatureValue(void);
 
 /*
 //I2C集(暂时只用到OLED和传感器)
-extern SofI2CTypeDef SofI2COLED;
-void I2CDelayUs(u32 nus);
-void I2CGPIOConfig(SofI2CTypeDef* SofI2CInode);
-static void SDaOut(SofI2CTypeDef* SofI2CInode);
-static void SDaIn(SofI2CTypeDef* SofI2CInode);
-void I2CStart(SofI2CTypeDef* SofI2CInode);
-void I2CStop(SofI2CTypeDef* SofI2CInode);
-void I2CSendACK(SofI2CTypeDef* SofI2CInode,uint8_t ack);
+extern SofI2CTypeDef sofI2cOled;
+void i2cDelayUs(u32 nus);
+void i2cGpioConfig(SofI2CTypeDef* sofI2cInode);
+static void sdaOut(SofI2CTypeDef* sofI2cInode);
+static void sdaIn(SofI2CTypeDef* sofI2cInode);
+void i2cStart(SofI2CTypeDef* sofI2cInode);
+void i2cStop(SofI2CTypeDef* sofI2cInode);
+void i2cSendAck(SofI2CTypeDef* sofI2cInode,uint8_t ack);
 */
 
 
 
 
 //OLED_128*4*8控制用函数
-void OLEDConfig(void);
+void oledConfig(void);
 
 void OLED_WR_Byte(unsigned dat,unsigned cmd);  
 void OLED_Display_On(void);
@@ -393,7 +393,7 @@ void IIC_Wait_Ack(void);
 void OLED_DataClear(void) ;
 
 //IWDG
-void IWDGConfig(u8 prer ,u16 rlr);
+void iwdgConfig(u8 prer ,u16 rlr);
 void IWDG_Feed(void);
 
 //MXL90614

@@ -44,7 +44,7 @@ u16 USART_RX_STA=0;       //接收状态标记
 
 //串口通信配置代码
 
-void USART1Config(void)//串口初始化
+void usart1ConfigAll(void)//串口初始化
 {		
 	/* 3.GPIOGPIO端口模式设置 */
 	GPIO_InitTypeDef GPIO_InitStructure; 

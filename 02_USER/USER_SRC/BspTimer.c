@@ -21,7 +21,7 @@
 
 //1ms -> (arr:999 psc:71)
 
-void TIM2Config(void)
+void tim2Config(void)
 {
 	
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;	
@@ -53,7 +53,7 @@ void TIM2Config(void)
 
 
 //PB1-TIM3_CH4 复用1KHz BUZZER无源蜂鸣器
-void TIM3PWMConfig(void)
+void tim3PwmConfig(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;	

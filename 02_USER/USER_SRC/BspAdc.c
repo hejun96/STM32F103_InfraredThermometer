@@ -102,7 +102,7 @@ static void ADCxModeConfig(void)
 	while(ADC_GetCalibrationStatus(ADC1));	 //等待校准结束
 	
 }
-void ADCConfig(void)
+void adcConfig(void)
 {
 	ADCxGPIOConfig();
 	ADCxModeConfig();

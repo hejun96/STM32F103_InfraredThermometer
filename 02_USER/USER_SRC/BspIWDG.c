@@ -3,7 +3,7 @@
 
 //Tout = ((4*2^prer)*rlr)/40
 //1000ms => ((4*2^4)*625)/40 
-void IWDGConfig(u8 prer ,u16 rlr)
+void iwdgConfig(u8 prer ,u16 rlr)
 {
 	IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);//1.使能对寄存器写操作
 	IWDG_SetPrescaler(IWDG_Prescaler_64);//2.设置IWDG预分频值
